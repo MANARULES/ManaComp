@@ -5,7 +5,28 @@
 
 using namespace std;
 
-void lagrange()
+class action{
+	public:
+		action(double,double,double,double;
+		void lagrange1();
+	private:
+		//Initial Conditions:
+		double xi;
+		double xf;
+		double ti;
+		double tf;
+}
+//Constructor with initial conditions
+action::action(double x_i,double x_f,double t_i,double t_f ){
+	xi = x_i;
+	xf = x_f;
+	ti = t_i;
+	tf = t_f;
+}
+
+
+// Here begins the lagrange1 function
+void action::lagrange1()
 {
   //Variable Definition
   vector<double> x, xdot, S;
@@ -40,3 +61,11 @@ void lagrange()
 	  xdot.push_back(deltax/deltat); //constant velocity in this case
 	  S=S+deltat*(lagrangian->Eval(x[i],xdot[i],0));
     }
+    }
+}
+//Here ends the lagrange1 funcion 
+
+int main(){
+	action a1 = action(0,0,1,1);
+	
+}

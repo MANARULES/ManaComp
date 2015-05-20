@@ -65,6 +65,7 @@ void action::lagrange1()
 }
 //Here ends the lagrange1 funcion 
 
+//Here begins the main function
 int main(){
 	action a1 = action(0,0,1,1);
 	

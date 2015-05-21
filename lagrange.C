@@ -9,6 +9,7 @@ class action{
 	public:
 		action(double,double,double,double;
 		void lagrange1();
+              void set_conditions(int,int,int,int);
 	private:
 		//Initial Conditions:
 		double xi;
@@ -19,6 +20,13 @@ class action{
 //Constructor with initial conditions
 action::action(double x_i,double x_f,double t_i,double t_f ){
 	xi = x_i;
+	xf = x_f;
+	ti = t_i;
+	tf = t_f;
+}
+
+void set_conditions(int a,int b, int c , int d){
+       xi = x_i;
 	xf = x_f;
 	ti = t_i;
 	tf = t_f;
@@ -68,5 +76,6 @@ void action::lagrange1()
 //Here begins the main function
 int main(){
 	action a1 = action(0,0,1,1);
+
 	
 }

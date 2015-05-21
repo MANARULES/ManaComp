@@ -2,21 +2,33 @@
 #include <string>
 #include <vector>
 #include <cmath>
+#include "TCanvas.h"
+#include "TF1.h" 
 
 using namespace std;
 
 class action{
 	public:
-		action(double,double,double,double;
+		action(double,double,double,double);
 		void lagrange1();
-              void set_conditions(int,int,int,int);
+    void set_conditions(int,int,int,int);
+    void graph();
 	private:
 		//Initial Conditions:
 		double xi;
 		double xf;
 		double ti;
 		double tf;
+		//Results
+		double x[];
+		double vx[];
+		double dx[];
+		double dvx[];
+		double t[];
+		
 }
+
+
 //Constructor with initial conditions
 action::action(double x_i,double x_f,double t_i,double t_f ){
 	xi = x_i;
@@ -25,12 +37,26 @@ action::action(double x_i,double x_f,double t_i,double t_f ){
 	tf = t_f;
 }
 
-void set_conditions(int a,int b, int c , int d){
-       xi = x_i;
+//Set initial conditions
+void action::set_conditions(int a,int b, int c , int d){
+  xi = x_i;
 	xf = x_f;
 	ti = t_i;
 	tf = t_f;
 }
+
+//Plot
+void action::Draw(double t[],double x[], double dx[]){
+
+	TGraphsErrors gr(n,t,x,dx);
+	gr.SetMarkerColor(2);
+  gr.SetMarkerStyle(20);
+  gr.SetMarkerSize(1.0);
+  gr.GetXaxis().SetTitle("Whatever X");
+  gr.GetYaxis().SetTitle("Whatever Y");
+	gr.Draw("Plot");
+}
+
 
 
 // Here begins the lagrange1 function
@@ -41,10 +67,10 @@ void action::lagrange1()
   double xi, xf, ti, tf; //initial conditions
   int n = 1000;
   double deltat=0,deltax=0, epsilon = 0.001,delta=0.001, action=0, aux1=xi; //needed parameters
-  TF2 *lagrangian = new TF1("lagrangian", pow(y,2)+mgx);
+  TF2 *lagrangian = new TF1("lagrangian", pow(y,2)+mgx); //?
 
   //Testing invariance of the Lagrangian in the interval
-  //while(lagrangian->Evaluate(
+  //while(lagrangian->Evaluate)
 
   //Defining vector of positions and vector of velocities while calculating action for the first time 
   deltat=(tf-ti)/n;

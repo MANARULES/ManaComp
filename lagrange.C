@@ -12,7 +12,8 @@ class action{
 		action(double,double,double,double);
 		void lagrange1();
     void set_conditions(int,int,int,int);
-    void graph();
+    void graph_gnuplot();
+    void draw_root();
 	private:
 		//Initial Conditions:
 		double xi;
@@ -46,7 +47,7 @@ void action::set_conditions(int a,int b, int c , int d){
 }
 
 //Plot
-void action::Draw(double t[],double x[], double dx[]){
+void action::Draw(int n, double t[],double x[], double dx[]){
 
 	TGraphsErrors gr(n,t,x,dx);
 	gr.SetMarkerColor(2);
@@ -102,6 +103,6 @@ void action::lagrange1()
 //Here begins the main function
 int main(){
 	action a1 = action(0,0,1,1);
-
+	
 	
 }

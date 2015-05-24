@@ -2,8 +2,9 @@
 #include <string>
 #include <vector>
 #include <cmath>
-#include "TCanvas.h"
-#include "TF1.h" 
+#include "gnuplot_i.hpp"
+//#include "TCanvas.h"
+//#include "TF1.h"
 
 using namespace std;
 
@@ -12,8 +13,8 @@ class action{
 		action(double,double,double,double);
 		void lagrange1();
     void set_conditions(int,int,int,int);
-    void graph_gnuplot();
-    void draw_root();
+    void graph_gnuplot(int , vector<double> &,vector<double> &, vector<double> &,int, int ,int, int );
+    //void draw_root();
 	private:
 		//Initial Conditions:
 		double xi;
@@ -21,13 +22,13 @@ class action{
 		double ti;
 		double tf;
 		//Results
-		double x[];
-		double vx[];
-		double dx[];
-		double dvx[];
-		double t[];
-		
-}
+		vector<double> x;
+		vector<double> vx;
+		vector<double> t;
+    vector<double> dx;
+    vector<double> dvx;
+
+};
 
 
 //Constructor with initial conditions
@@ -40,14 +41,14 @@ action::action(double x_i,double x_f,double t_i,double t_f ){
 
 //Set initial conditions
 void action::set_conditions(int a,int b, int c , int d){
-  xi = x_i;
-	xf = x_f;
-	ti = t_i;
-	tf = t_f;
+  xi = a;
+	xf = b;
+	ti = c;
+	tf = d;
 }
 
 //Plot
-void action::Draw(int n, double t[],double x[], double dx[]){
+/*void action::Draw(int n, double t[],double x[], double vx[]){
 
 	TGraphsErrors gr(n,t,x,dx);
 	gr.SetMarkerColor(2);
@@ -56,12 +57,40 @@ void action::Draw(int n, double t[],double x[], double dx[]){
   gr.GetXaxis().SetTitle("Whatever X");
   gr.GetYaxis().SetTitle("Whatever Y");
 	gr.Draw("Plot");
+}*/
+
+void action::graph_gnuplot(int n, vector<double> &t2,vector<double> &x, vector<double> &dx,int begin_x, int end_x,int begin_y, int end_y){
+  
+  vector<pair<double, double> > xy_pts_A;
+  vector<pair<double, double> > xy_pts_B;
+
+  for(double i=0; i<n; i++) {
+    xy_pts_A.push_back(make_pair(t2[i], x[i]));
+    xy_pts_B.push_back(make_pair(t2[i], dx[i]));
+  }
+  
+  cout << "t0 = "<<t2[0] << "t8 =" << t2[8] << endl;
+  cout << "x2 = "<<x[2] << "x8 = "<< x[8] << endl;
+  cout << "dx3 = "<<dx[3] << "dx8 =" << dx[8] << endl;
+  cout << "Size t:" << t2.size() << endl;
+  cout << "Size x:" << x.size() << endl;
+  
+  try
+  {
+    Gnuplot g1("lines");
+    g1.set_grid();
+    g1.set_style("points").plot_xy(t2,x,"x(t)");
+  }
+  catch (GnuplotException ge)
+  {
+    cout << ge.what() << endl;
+  }
+  
 }
 
 
-
 // Here begins the lagrange1 function
-void action::lagrange1()
+/*void action::lagrange1()
 {
   //Variable Definition
   vector<double> x, xdot, S;
@@ -98,11 +127,16 @@ void action::lagrange1()
     }
     }
 }
-//Here ends the lagrange1 funcion 
+//Here ends the lagrange1 funcion
+*/
 
 //Here begins the main function
 int main(){
 	action a1 = action(0,0,1,1);
-	
+  vector<double> x(11,3.0);
+  vector<double> y(11,5.0);
+  int myints[] = {0,1,2,3,4,5,6,7,8,9,10};
+  vector<double> test (myints, myints + sizeof(myints) / sizeof(int) );
+  a1.graph_gnuplot(11,test,x,y,0,10,0,10);
 	
 }

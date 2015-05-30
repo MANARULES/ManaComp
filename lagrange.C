@@ -13,7 +13,8 @@ class action{
 		action(double,double,double,double);
 		void lagrange1();
     void set_conditions(int,int,int,int);
-    void graph_gnuplot(int , vector<double> &,vector<double> &, vector<double> &,int, int ,int, int );
+    void graph_gnuplot(int ,int);
+    void set_results(vector<double> , vector<double> ,vector<double> );
     //void draw_root();
 	private:
 		//Initial Conditions:
@@ -29,7 +30,6 @@ class action{
     vector<double> dvx;
 
 };
-
 
 //Constructor with initial conditions
 action::action(double x_i,double x_f,double t_i,double t_f ){
@@ -47,6 +47,12 @@ void action::set_conditions(int a,int b, int c , int d){
 	tf = d;
 }
 
+void action::set_results(vector<double> t1, vector<double> x1,vector<double> vx1){
+  t = t1;
+  x = x1;
+  vx = vx1;
+}
+
 //Plot
 /*void action::Draw(int n, double t[],double x[], double vx[]){
 
@@ -59,27 +65,18 @@ void action::set_conditions(int a,int b, int c , int d){
 	gr.Draw("Plot");
 }*/
 
-void action::graph_gnuplot(int n, vector<double> &t2,vector<double> &x, vector<double> &dx,int begin_x, int end_x,int begin_y, int end_y){
-  
-  vector<pair<double, double> > xy_pts_A;
-  vector<pair<double, double> > xy_pts_B;
 
-  for(double i=0; i<n; i++) {
-    xy_pts_A.push_back(make_pair(t2[i], x[i]));
-    xy_pts_B.push_back(make_pair(t2[i], dx[i]));
-  }
-  
-  cout << "t0 = "<<t2[0] << "t8 =" << t2[8] << endl;
-  cout << "x2 = "<<x[2] << "x8 = "<< x[8] << endl;
-  cout << "dx3 = "<<dx[3] << "dx8 =" << dx[8] << endl;
-  cout << "Size t:" << t2.size() << endl;
-  cout << "Size x:" << x.size() << endl;
+void action::graph_gnuplot(int a, int b){
   
   try
   {
     Gnuplot g1("lines");
     g1.set_grid();
-    g1.set_style("points").plot_xy(t2,x,"x(t)");
+    g1.set_style("lines").plot_xy(t,x,"x(t)");
+    
+    Gnuplot g2("lines");
+    g2.set_grid();
+    g2.set_style("lines").plot_xy(t,vx,"x(t)");
   }
   catch (GnuplotException ge)
   {
@@ -133,10 +130,15 @@ void action::graph_gnuplot(int n, vector<double> &t2,vector<double> &x, vector<d
 //Here begins the main function
 int main(){
 	action a1 = action(0,0,1,1);
-  vector<double> x(11,3.0);
-  vector<double> y(11,5.0);
-  int myints[] = {0,1,2,3,4,5,6,7,8,9,10};
-  vector<double> test (myints, myints + sizeof(myints) / sizeof(int) );
-  a1.graph_gnuplot(11,test,x,y,0,10,0,10);
-	
+  double tempoarray[] = {0,1,2,3,4,5,6,7,8,9,10};
+  double qarray[] = {3,4,5,6,7,3,4,5,2,1,3};
+  double qpontoarray[] = {5,4,3,2,1,0,5,6,4,3,3};
+  vector<double> tempo(begin(tempoarray),end(tempoarray));
+  vector<double> q(begin(qarray),end(qarray));
+  vector<double> qponto(begin(qpontoarray),end(qpontoarray));
+  
+  
+  a1.set_results(tempo,q,qponto);
+  a1.graph_gnuplot(0,0);
+  
 }

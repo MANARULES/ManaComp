@@ -3,20 +3,24 @@
 #include <vector>
 #include <cmath>
 #include "gnuplot_i.hpp"
-//#include "TCanvas.h"
-//#include "TF1.h"
+#include <functional>
+#include "TF1.h"
 
 using namespace std;
 
 class action{
 	public:
-		action(double,double,double,double);
+		action(double,double,double,double,const function<double(double,double)> &);
+    action(double ,double ,double ,double , TF1*);
 		void lagrange1();
     void set_conditions(int,int,int,int);
     void graph_gnuplot(int ,int);
     void set_results(vector<double> , vector<double> ,vector<double> );
     //void draw_root();
 	private:
+    //Lagrangeano
+    function<double(double,double)> lag;
+    TF1 *lag2;
 		//Initial Conditions:
 		double xi;
 		double xf;
@@ -32,13 +36,21 @@ class action{
 };
 
 //Constructor with initial conditions
-action::action(double x_i,double x_f,double t_i,double t_f ){
+action::action(double x_i,double x_f,double t_i,double t_f, const function<double(double,double)> &langr){
 	xi = x_i;
 	xf = x_f;
 	ti = t_i;
 	tf = t_f;
+  lag =langr;
 }
 
+action::action(double x_i,double x_f,double t_i,double t_f, TF1* langr){
+  xi = x_i;
+  xf = x_f;
+  ti = t_i;
+  tf = t_f;
+  lag2 =langr;
+};
 //Set initial conditions
 void action::set_conditions(int a,int b, int c , int d){
   xi = a;
@@ -68,6 +80,7 @@ void action::set_results(vector<double> t1, vector<double> x1,vector<double> vx1
 
 void action::graph_gnuplot(int a, int b){
   
+  lag(5,9);
   try
   {
     Gnuplot g1("lines");
@@ -127,16 +140,27 @@ void action::graph_gnuplot(int a, int b){
 //Here ends the lagrange1 funcion
 */
 
+//Create the langrangian
+
+double grave(double a, double b){
+  double cenas;
+  cenas = 20*b*b+50*a*a;
+  cout << "cenas" << cenas << endl;
+  return cenas;
+}
+
+
+
 //Here begins the main function
-int main(){
-	action a1 = action(0,0,1,1);
+int main(int argc, char *argv[]){
+  TF1 *lag = new TF1("lagrangeano",argv[1]);
+	action a1 = action(0,0,1,1,&grave);
   double tempoarray[] = {0,1,2,3,4,5,6,7,8,9,10};
   double qarray[] = {3,4,5,6,7,3,4,5,2,1,3};
   double qpontoarray[] = {5,4,3,2,1,0,5,6,4,3,3};
   vector<double> tempo(begin(tempoarray),end(tempoarray));
   vector<double> q(begin(qarray),end(qarray));
   vector<double> qponto(begin(qpontoarray),end(qpontoarray));
-  
   
   a1.set_results(tempo,q,qponto);
   a1.graph_gnuplot(0,0);

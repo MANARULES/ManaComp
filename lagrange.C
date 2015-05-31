@@ -115,11 +115,11 @@ void action::graph_gnuplot(int a, int b, string c){
 void action::lagrange1()
 {
   //Variable Definition
-  vector<double> xp,xdot, S, points, time ;
+  vector<double> xp, xdot, S, points, time ;
   int n = 1000;
   double deltat=0,deltax=0, epsilon=0.02, delta=0.01, aux, x1, x2, xdot1, xdot2, xm1, xm2;
   TF2 *lagrangian = lag2;
-  double action;
+  double action = 0;
   
   //Testing invariance of the Lagrangian in the interval */queremos que o lagrangiano se mantenha aproximadamente constante no intervalo*/
   //while(lagrangian->Evaluate(
@@ -129,14 +129,18 @@ void action::lagrange1()
   deltax=(xf-xi)/n;
   points.push_back(xi);
   time.push_back(ti);
+  cout << "deltat" << deltat<< endl;
+  points[0] = xi;
   for(int i=1; i<=n; i++)
   {
+    //cout << "action: " << action << endl;
     time.push_back(ti+deltat*i);
     points.push_back(xi+i*deltax); //extremal points of the interval
     xdot.push_back(deltax/deltat); //constant velocity in this case
     xp.push_back((points[i]+points[i-1])/2); //medium point of the interval
-    S.push_back(deltat*(lagrangian->Eval(xp[i],xdot[i],0))); //action in each small interval
-    action = action + S[i]; //sum of action in each interval
+    S.push_back(deltat*(lagrangian->Eval(xp[i-1],xdot[i-1],0))); //action in each small interval
+    action = action + S[i-1]; //sum of action in each interval
+    
   }
   
   cout << "action: " << action << endl; //total action when using straight line to connect the points
@@ -215,13 +219,14 @@ void action::lagrange1()
       }
       
     }
+
   }
   cout << points.size()<<endl;
   cout << time.size()<<endl;
+
+  cout << "x" <<x.size()<<endl;
   x = points;
   t = time;
-  cout << "x" <<x.size()<<endl;
-  
   
 }
 

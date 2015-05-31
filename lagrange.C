@@ -15,7 +15,7 @@ public:
   action(double ,double ,double ,double , TF2*);
   void lagrange1();
   void set_conditions(int,int,int,int);
-  void graph_gnuplot(int ,int);
+  void graph_gnuplot(int ,int,string c);
   void set_results(vector<double> , vector<double> ,vector<double> );
   //void draw_root();
   vector<double> getresults(int a){ if (a == 1)return x; else return t;};
@@ -80,7 +80,7 @@ void action::set_results(vector<double> t1, vector<double> x1,vector<double> vx1
  }*/
 
 
-void action::graph_gnuplot(int a, int b){
+void action::graph_gnuplot(int a, int b, string c){
   
   cout << t.size() << endl;
   cout << "x" << x.size() << endl;
@@ -97,6 +97,11 @@ void action::graph_gnuplot(int a, int b){
       g2.set_grid();
       g2.set_style("lines").plot_xy(t,vx,"vx(t)");
     }
+    if ( c != NULL){
+      Gnuplot g3("lines");
+      g3.set_grid();
+      g3.plot_equation(c,c);
+    }
   }
   catch (GnuplotException ge)
   {
@@ -111,10 +116,9 @@ void action::lagrange1()
 {
   //Variable Definition
   vector<double> xp,xdot, S, points, time ;
- // double xi = 0, xf = 20, ti = 0, tf = 1000; //initial conditions -  Definidas na classe!
   int n = 1000;
   double deltat=0,deltax=0, epsilon=0.02, delta=0.01, aux, x1, x2, xdot1, xdot2, xm1, xm2;
-  TF2 *lagrangian = new TF2("lagrangian", "pow(y,2)-x*x*x");
+  TF2 *lagrangian = lag2;
   double action;
   
   //Testing invariance of the Lagrangian in the interval */queremos que o lagrangiano se mantenha aproximadamente constante no intervalo*/
@@ -237,9 +241,27 @@ double grave(double a, double b){
 
 //Here begins the main function
 int main(int argc, char *argv[]){
-  TF2 *lag = new TF2("lagrangeano",argv[1]);
-  action a1 = action(10,0,0,100,lag);
+  TF2 *lag;
+  if( argc > 0)
+    lag = new TF2("lagrangeano",argv[1]);
+  else
+    lag = new TF2("lagrangeano","y*y+x"); //Langragean por defeito
   
+  double x_i,x_f,t_i,t_f;
+  //Initail conditions
+  if ( argc  > 5){
+    x_i = atof(argv[2]);
+    x_f = atof(argv[3]);
+    t_i = atof(argv[4]);
+    t_f = atof(argv[5]);
+  }
+  else{
+    x_i = 10;
+    x_f = 0;
+    t_i = 0;
+    t_f = 100;
+  }
+  action a1 = action(x_i,x_f,t_i,t_f,lag);
   a1.lagrange1();
-  a1.graph_gnuplot(1,0);
+  a1.graph_gnuplot(1,0,"0.25*x*x"); // The first argument is if you wanna plot x(t) i so just put 1 if not put 0. The second is the same but this time for xponto(t). O terceiro é um plot de uma função que ponhas lá, to compare  with the x(t) or xponto(t) real...
 }

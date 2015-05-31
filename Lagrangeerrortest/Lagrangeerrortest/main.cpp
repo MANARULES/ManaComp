@@ -1,120 +1,11 @@
-#include <iostream>
-#include <string>
-#include <vector>
-#include <cmath>
-#include "gnuplot_i.hpp"
-#include <functional>
-#include "TF1.h"
-#include "TF2.h"
-
-using namespace std;
-
-class action{
-public:
-  action(double,double,double,double,const function<double(double,double)> &);
-  action(double ,double ,double ,double , TF2*);
-  void lagrange1();
-  void set_conditions(int,int,int,int);
-  void graph_gnuplot(int ,int);
-  void set_results(vector<double> , vector<double> ,vector<double> );
-  //void draw_root();
-  vector<double> getresults(int a){ if (a == 1)return x; else return t;};
-private:
-  //Lagrangeano
-  function<double(double,double)> lag;
-  TF2 *lag2;
-  //Initial Conditions:
-  double xi;
-  double xf;
-  double ti;
-  double tf;
-  //Results
-  vector<double> x;
-  vector<double> vx;
-  vector<double> t;
-  vector<double> dx;
-  vector<double> dvx;
-  };
-
-//Constructor with initial conditions
-action::action(double x_i,double x_f,double t_i,double t_f, const function<double(double,double)> &langr){
-  xi = x_i;
-  xf = x_f;
-  ti = t_i;
-  tf = t_f;
-  lag =langr;
-}
-
-action::action(double x_i,double x_f,double t_i,double t_f, TF2* langr){
-  xi = x_i;
-  xf = x_f;
-  ti = t_i;
-  tf = t_f;
-  lag2 =langr;
-};
-//Set initial conditions
-void action::set_conditions(int a,int b, int c , int d){
-  xi = a;
-  xf = b;
-  ti = c;
-  tf = d;
-}
-
-void action::set_results(vector<double> t1, vector<double> x1,vector<double> vx1){
-  t = t1;
-  x = x1;
-  vx = vx1;
-}
-
-
-//Plot
-/*void action::Draw(int n, double t[],double x[], double vx[]){
- 
-	TGraphsErrors gr(n,t,x,dx);
-	gr.SetMarkerColor(2);
- gr.SetMarkerStyle(20);
- gr.SetMarkerSize(1.0);
- gr.GetXaxis().SetTitle("Whatever X");
- gr.GetYaxis().SetTitle("Whatever Y");
-	gr.Draw("Plot");
- }*/
-
-
-void action::graph_gnuplot(int a, int b){
-  
-  cout << t.size() << endl;
-  cout << "x" << x.size() << endl;
-  try
-  {
-    if ( a != 0)
-    {
-      Gnuplot g1("lines");
-      g1.set_grid();
-      g1.set_style("lines").plot_xy(t,x,"x(t)");
-    }
-    if( b != 0){
-      Gnuplot g2("lines");
-      g2.set_grid();
-      g2.set_style("lines").plot_xy(t,vx,"vx(t)");
-    }
-  }
-  catch (GnuplotException ge)
-  {
-    cout << ge.what() << endl;
-  }
-  
-}
-
-
-// Here begins the lagrange1 function
 void action::lagrange1()
 {
   //Variable Definition
   vector<double> xp,xdot, S, points, time ;
- // double xi = 0, xf = 20, ti = 0, tf = 1000; //initial conditions -  Definidas na classe!
+  double xi, xf, ti, tf; //initial conditions
   int n = 1000;
   double deltat=0,deltax=0, epsilon=0.02, delta=0.01, aux, x1, x2, xdot1, xdot2, xm1, xm2;
-  TF2 *lagrangian = new TF2("lagrangian", "pow(y,2)-x*x*x");
+  TF2 *lagrangian = new TF2("lagrangian", "pow(y,2)+x");
   double action;
   
   //Testing invariance of the Lagrangian in the interval */queremos que o lagrangiano se mantenha aproximadamente constante no intervalo*/
@@ -214,32 +105,9 @@ void action::lagrange1()
   }
   cout << points.size()<<endl;
   cout << time.size()<<endl;
-  x = points;
+  xp = points;
   t = time;
-  cout << "x" <<x.size()<<endl;
+  cout << "xp" <<xp.size()<<endl;
   
   
-}
-
-//Here ends the lagrange1 funcion
-
-
-//Create the langrangian //If you don't want to use ROOT for the TF2!
-
-double grave(double a, double b){
-  double cenas;
-  cenas = 20*b*b+50*a*a;
-  cout << "cenas" << cenas << endl;
-  return cenas;
-}
-
-
-
-//Here begins the main function
-int main(int argc, char *argv[]){
-  TF2 *lag = new TF2("lagrangeano",argv[1]);
-  action a1 = action(10,0,0,100,lag);
-  
-  a1.lagrange1();
-  a1.graph_gnuplot(1,0);
 }

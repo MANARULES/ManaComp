@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>9D67421A-DD3E-4B22-852C-6961D8E15E3B</string>
+	<key>IDESourceControlProjectName</key>
+	<string>project</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>2A905724F81BBD495805FEF47A20E251DC42CC08</key>
+		<string>https://github.com/MANARULES/ManaComp.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Lagrangeerrortest/Lagrangeerrortest.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>2A905724F81BBD495805FEF47A20E251DC42CC08</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/MANARULES/ManaComp.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>2A905724F81BBD495805FEF47A20E251DC42CC08</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>2A905724F81BBD495805FEF47A20E251DC42CC08</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ManaComp</string>
+		</dict>
+	</array>
+</dict>
+</plist>

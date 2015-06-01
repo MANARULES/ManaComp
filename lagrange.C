@@ -117,7 +117,7 @@ void action::lagrange1()
   //Variable Definition
   vector<double> xp, xdot, S, points, time ;
   int n = 1000;
-  double deltat=0,deltax=0, epsilon=5, delta=0.01, aux, x1, x2, xdot1, xdot2, xm1, xm2;
+  double deltat=0,deltax=0, epsilon=0.00001, delta=0.01, aux, x1, x2, xdot1, xdot2, xm1, xm2;
   TF2 *lagrangian = lag2;
   double action = 0;
   
@@ -165,7 +165,7 @@ void action::lagrange1()
       xdot2 = (points[i+2]-x2)/deltat;
       xm2 = (points[i+2]+x2)/2;
       
-      aux = deltat*(lagrangian->Eval(xm1,xdot1,0)+lagrangian->Eval(xm2,xdot2,0));
+      aux = deltat*(lagrangian->Eval(xm1,xdot1)+lagrangian->Eval(xm2,xdot2));
       
       if(S[i]+S[i+1]>aux)
       {
@@ -197,9 +197,11 @@ void action::lagrange1()
       xm2 = (points[i+2]+x2)/2;
       
       aux = deltat*(lagrangian->Eval(xm1,xdot1,0)+lagrangian->Eval(xm2,xdot2,0));
-      
+      cout << "S" << S[i]+S[i+1] << endl;
+      cout << "aux" << aux << endl;
       if(S[i]+S[i+1]>aux)
       {
+        cout << "in" << endl;
         points[i+1] = x1;
         xp[i] = xm1;
         xdot[i] = xdot1;

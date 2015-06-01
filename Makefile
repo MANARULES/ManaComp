@@ -8,7 +8,7 @@ Lagrange: $(OBJS)
 lagrange.o: lagrange.C
 	g++ -c lagrange.C $(CFLAGS) 
 
-Lagrange5: lagrange5.omake
+Lagrange5: lagrange5.o
 	g++ -o lagrange5 lagrange5.o $(CFLAGS) $(GLIBS) 
 
 lagrange5.o: lagrange5.C

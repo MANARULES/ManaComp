@@ -138,9 +138,8 @@ void action::lagrange1()
     points.push_back(xi+i*deltax); //extremal points of the interval
     xdot.push_back(deltax/deltat); //constant velocity in this case
     xp.push_back((points[i]+points[i-1])/2); //medium point of the interval
-    S.push_back(deltat*(lagrangian->Eval(xp[i-1],xdot[i-1],0))); //action in each small interval
+    S.push_back(deltat*(lagrangian->Eval(xp[i-1],xdot[i-1]))); //action in each small interval
     action = action + S[i-1]; //sum of action in each interval
-    
   }
   
   cout << "action: " << action << endl; //total action when using straight line to connect the points
@@ -170,7 +169,6 @@ void action::lagrange1()
       
       if(S[i]+S[i+1]>aux)
       {
-      	cout << "Ele passou por aqui." <<endl;
         points[i+1] = x1;
         xp[i] = xm1;
         xdot[i] = xdot1;
@@ -202,7 +200,6 @@ void action::lagrange1()
       
       if(S[i]+S[i+1]>aux)
       {
-      	cout << "Ele passou por aqui."<<endl;
         points[i+1] = x1;
         xp[i] = xm1;
         xdot[i] = xdot1;

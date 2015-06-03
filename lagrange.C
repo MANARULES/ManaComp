@@ -19,6 +19,7 @@ public:
   void set_results(vector<double> , vector<double> ,vector<double> );
   //void draw_root();
   vector<double> getresults(int a){ if (a == 1)return x; else return t;};
+  void set_name(string name){lagrangiano = name;}
 private:
   //Lagrangeano
   function<double(double,double)> lag;
@@ -34,6 +35,7 @@ private:
   vector<double> t;
   vector<double> dx;
   vector<double> dvx;
+  string lagrangiano;
   };
 
 //Constructor with initial conditions
@@ -90,17 +92,24 @@ void action::graph_gnuplot(int a, int b, string c){
     {
       Gnuplot g1("lines");
       g1.set_grid();
+      
       g1.set_style("points").plot_xy(t,x,"x(t)");
+      g1.set_legend("outside right top");
+      if ( c != NULL){
+        g1.savetops(lagrangiano);
+      
+        g1.set_style("lines").plot_equation(c,c);
+      }
+      g1.showonscreen(); // window output
+      
+      
     }
     if( b != 0){
       Gnuplot g2("lines");
+      g2.savetops(lagrangiano+"V(t)");
       g2.set_grid();
       g2.set_style("points").plot_xy(t,vx,"vx(t)");
-    }
-    if ( c != NULL){
-      Gnuplot g3("lines");
-      g3.set_grid();
-      g3.plot_equation(c,c);
+      g2.showonscreen();
     }
   }
   catch (GnuplotException ge)
@@ -116,8 +125,8 @@ void action::lagrange1()
 {
   //Variable Definition
   vector<double> xp, xdot, S, points, time ;
-  int n = 20;
-  double deltat=0,deltax=0, epsilon=0.0001, delta=0.00001, aux, x1, x2, xdot1, xdot2, xm1, xm2;
+  int n = 50;
+  double deltat=0,deltax=0, epsilon=0.00005, delta=0.00001, aux, x1, x2, xdot1, xdot2, xm1, xm2;
   TF2 *lagrangian = lag2;
   double action = 0;
   
@@ -252,26 +261,35 @@ double grave(double a, double b){
 int main(int argc, char *argv[]){
   TF2 *lag;
   cout << argc;
-  if( argc > 1)
+  string nome;
+  if( argc > 1){
     lag = new TF2("lagrangeano",argv[1]);
-  else
+    nome = argv[1];
+  }
+  else{
     lag = new TF2("lagrangeano","y*y+x"); //Langragean por defeito
+    nome  = "y^2+x";
+  }
   
   double x_i,x_f,t_i,t_f;
+  string theory;
   //Initail conditions
-  if ( argc  > 5){
+  if ( argc  > 6){
     x_i = atof(argv[2]);
     x_f = atof(argv[3]);
     t_i = atof(argv[4]);
     t_f = atof(argv[5]);
+    theory = argv[6];
   }
   else{
     x_i = 10;
     x_f = 0;
     t_i = 0;
     t_f = 100;
+    theory = "-5*x^2+56";
   }
   action a1 = action(x_i,x_f,t_i,t_f,lag);
+  a1.set_name(nome);
   a1.lagrange1();
-  a1.graph_gnuplot(1,1,"-0.5*x*x+20"); // The first argument is if you wanna plot x(t) i so just put 1 if not put 0. The second is the same but this time for xponto(t). O terceiro é um plot de uma função que ponhas lá, to compare  with the x(t) or xponto(t) real...
+  a1.graph_gnuplot(1,1,theory); // The first argument is if you wanna plot x(t) i so just put 1 if not put 0. The second is the same but this time for xponto(t). O terceiro é um plot de uma função que ponhas lá, to compare  with the x(t) or xponto(t) real...
 }

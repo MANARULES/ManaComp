@@ -93,8 +93,7 @@ void action::graph_gnuplot(int a, int b, string c){
       Gnuplot g1("lines");
       g1.set_grid();
       
-      g1.set_style("points").plot_xy(t,x,"x(t)");
-      g1.set_legend("outside right top");
+      g1.set_style("points").set_xlabel("t").set_ylabel("y").plot_xy(t,x,"y(t)");
       if ( c != NULL){
         g1.savetops(lagrangiano);
       
@@ -108,7 +107,7 @@ void action::graph_gnuplot(int a, int b, string c){
       Gnuplot g2("lines");
       g2.savetops(lagrangiano+"V(t)");
       g2.set_grid();
-      g2.set_style("points").plot_xy(t,vx,"vx(t)");
+      g2.set_style("points").set_xlabel("t").set_ylabel("v").plot_xy(t,vx,"v_y(t)");
       g2.showonscreen();
     }
   }
@@ -125,8 +124,8 @@ void action::lagrange1()
 {
   //Variable Definition
   vector<double> xp, xdot, S, points, time ;
-  int n = 50;
-  double deltat=0,deltax=0, epsilon=0.00005, delta=0.00001, aux, x1, x2, xdot1, xdot2, xm1, xm2;
+  int n = 20;
+  double deltat=0,deltax=0, epsilon=0.0001, delta=0.00001, aux, x1, x2, xdot1, xdot2, xm1, xm2;
   TF2 *lagrangian = lag2;
   double action = 0;
   
